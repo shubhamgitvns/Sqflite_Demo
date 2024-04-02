@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-
 import 'Book.dart';
 import 'database.dart';
 
@@ -17,6 +16,11 @@ class _VsjSqliteState extends State<VsjSqlite> {
   TextEditingController idcontroller = TextEditingController();
   TextEditingController namecontroller = TextEditingController();
   TextEditingController pricecontroller = TextEditingController();
+  void text_Clear(){
+    idcontroller.text="";
+    namecontroller.text="";
+    pricecontroller.text="";
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -95,7 +99,13 @@ class _VsjSqliteState extends State<VsjSqlite> {
                               print("Add");
                               setState(() {
                                 message="Add";
+                                bookid=idcontroller.text;
+                                bookname=namecontroller.text;
+                                bookprice=pricecontroller.text;
+
                               });
+                              text_Clear();
+
                             }();
                           }),
                       ElevatedButton(
@@ -107,6 +117,7 @@ class _VsjSqliteState extends State<VsjSqlite> {
                               setState(() {
                                 message="Delete";
                               });
+                              text_Clear();
                             }();
                           }),
                       ElevatedButton(
@@ -120,6 +131,10 @@ class _VsjSqliteState extends State<VsjSqlite> {
                               // Print the updated results.
                               print(await DatabaseHandler.books());
                             print("Update");
+                            bookid=idcontroller.text;
+                            bookname=namecontroller.text;
+                            bookprice=pricecontroller.text;
+                            text_Clear();
                             }();
                           }),
                       ElevatedButton(
@@ -140,15 +155,15 @@ class _VsjSqliteState extends State<VsjSqlite> {
                               pricecontroller.text=book.price.toString();
                             }
                             setState(() {
-
+                              // text_Clear();
                             });
                           }),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text("Id"),
@@ -156,15 +171,15 @@ class _VsjSqliteState extends State<VsjSqlite> {
                       Text("Price"),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text(idcontroller.text),
-                      Text(namecontroller.text),
-                      Text(pricecontroller.text),
+                      Text(bookid),
+                      Text(bookname),
+                      Text(bookprice),
                     ],
                   )
                 ],
