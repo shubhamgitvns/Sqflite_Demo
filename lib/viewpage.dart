@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'Book.dart';
 import 'database.dart';
+import 'downloder.dart';
 
 class VsjSqlite extends StatefulWidget {
   //final String title = "Sqlite Database";
@@ -11,16 +12,8 @@ class VsjSqlite extends StatefulWidget {
 }
 
 class _VsjSqliteState extends State<VsjSqlite> {
-  String bookid = "", bookname = "", bookprice = "", message = "";
+  String bookid = "", bookname = "", bookprice = "", message = "", id = "";
 
-  TextEditingController idcontroller = TextEditingController();
-  TextEditingController namecontroller = TextEditingController();
-  TextEditingController pricecontroller = TextEditingController();
-  void text_Clear(){
-    idcontroller.text="";
-    namecontroller.text="";
-    pricecontroller.text="";
-  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -36,139 +29,39 @@ class _VsjSqliteState extends State<VsjSqlite> {
             ),
             body: Center(
               child: Column(
-                // mainAxisAlignment: MainAxisAlignment.start,
+                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(message),
-                  SizedBox(
-                    height: 30,
-                  ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(children: [
-                        Text("Id"),
-                        SizedBox(
-                          width: 60,
-                          child: TextField(
-                            onChanged: (value) {
-                              bookid = value;
-                            },
-                            controller: idcontroller,
-                          ),
-                        ),
-                      ]),
-                      Column(children: [
-                        Text("Name"),
-                        SizedBox(
-                          width: 60,
-                          child: TextField(
-                            controller: namecontroller,
-                            onChanged: (value) {
-                              bookname = value;
-                            },
-                          ),
-                        ),
-                      ]),
-                      Column(children: [
-                        Text("Price"),
-                        SizedBox(
-                          width: 60,
-                          child: TextField(
-                            controller: pricecontroller,
-                            onChanged: (value) {
-                              bookprice = value;
-                            },
-                          ),
-                        ),
-                      ]),
-                    ],
-                  ),
-                  SizedBox(height: 30,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
                           child: Text("Add"),
-                          onPressed: () {
-                            () async {
-                              print("bn" + bookname);
-                              var javabook = Book(int.parse(idcontroller.text), namecontroller.text,
-                                  int.parse(pricecontroller.text));
-
-                              await DatabaseHandler.insertBook(javabook);
-                              print("Add");
-                              setState(() {
-                                message="Add";
-                                bookid=idcontroller.text;
-                                bookname=namecontroller.text;
-                                bookprice=pricecontroller.text;
-
-                              });
-                              text_Clear();
-
-                            }();
-                          }),
-                      ElevatedButton(
-                          child: Text("Del"),
-                          onPressed: () {
-                            () async {
-                              DatabaseHandler.deleteBook(int.parse(idcontroller.text));
-                              print("Del");
-                              setState(() {
-                                message="Delete";
-                              });
-                              text_Clear();
-                            }();
-                          }),
-                      ElevatedButton(
-                          child: Text("Update"),
-                          onPressed: () {
-                            () async {
-                              var javabook = Book(int.parse(idcontroller.text), namecontroller.text,
-                                  int.parse(pricecontroller.text));
-                              await DatabaseHandler.updateBook(javabook);
-
-                              // Print the updated results.
-                              print(await DatabaseHandler.books());
-                            print("Update");
-                            bookid=idcontroller.text;
-                            bookname=namecontroller.text;
-                            bookprice=pricecontroller.text;
-                            text_Clear();
-                            }();
-                          }),
-                      ElevatedButton(
-                          child: Text("Search"),
-                          onPressed: () async {
-                            print("Search");
-                            var list= await DatabaseHandler.books();
-                            List<Book> lst=list;
-                            lst=   lst.where((element) => element.id==int.parse(bookid)).toList();
-                            if(lst.length<=0)
-                              message="Not Found";
-                            else
-                            {
-                              print(list);
-                              message="Found";
-                              Book book=lst.first;
-                              namecontroller.text=book.name;
-                              pricecontroller.text=book.price.toString();
+                          onPressed: ()async {
+                            try {
+                              dynamic text = await Utilities.Downloaddata(
+                                  "/shubhamgitvns/c790d76f25b1481514f829cced8373dd/raw/15ef8b9273019f2400df69cc43d873df515389ae/gistfile1.txt");
+                              print(text);
+                            }catch(ex){
+                              print(ex);
                             }
-                            setState(() {
+
+                              // print("bn" + bookname);
+                              // var javabook = Book(
+                              //     int.parse(idcontroller.text),
+                              //     namecontroller.text,
+                              //     int.parse(pricecontroller.text));
+                              //
+                              // await DatabaseHandler.insertBook(javabook);
+                              // print("Add");
+                              // setState(() {
+                              //   message = "Add";
+                              //   id = idcontroller.text;
+                              //   bookname = namecontroller.text;
+                              //   bookprice = pricecontroller.text;
+                              // });
                               // text_Clear();
-                            });
-                          }),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text("Id"),
-                      Text("Name"),
-                      Text("Price"),
+                            }),
+
                     ],
                   ),
                   const SizedBox(
@@ -177,9 +70,9 @@ class _VsjSqliteState extends State<VsjSqlite> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text(bookid),
-                      Text(bookname),
-                      Text(bookprice),
+                      Text("id"),
+                      Text("bookname"),
+                      Text("bookprice"),
                     ],
                   )
                 ],
