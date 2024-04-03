@@ -41,6 +41,13 @@ class _VsjSqliteState extends State<VsjSqlite> {
                               dynamic text = await Utilities.Downloaddata(
                                   "/shubhamgitvns/c790d76f25b1481514f829cced8373dd/raw/15ef8b9273019f2400df69cc43d873df515389ae/gistfile1.txt");
                               print(text);
+                             id="${text["data"]["id"]}";
+                             bookname="${text["data"]["book"]}";
+                             bookprice="${text["data"]["price"]}";
+                             print(id);
+                             print(bookname);
+                             print(bookprice);
+
                             }catch(ex){
                               print(ex);
                             }
@@ -70,9 +77,9 @@ class _VsjSqliteState extends State<VsjSqlite> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text("id"),
-                      Text("bookname"),
-                      Text("bookprice"),
+                      Text(id),
+                      Text(bookname),
+                      Text(bookprice),
                     ],
                   )
                 ],
