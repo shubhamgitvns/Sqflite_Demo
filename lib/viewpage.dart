@@ -12,7 +12,9 @@ class VsjSqlite extends StatefulWidget {
 }
 
 class _VsjSqliteState extends State<VsjSqlite> {
+  TextEditingController idcontroller = TextEditingController();
   String bookid = "", bookname = "", bookprice = "", message = "", id = "";
+  String rollno="21", name="shubham",price="123456789";
 
   @override
   Widget build(BuildContext context) {
@@ -31,42 +33,32 @@ class _VsjSqliteState extends State<VsjSqlite> {
               child: Column(
                  mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  Text(message),
+                  SizedBox(height: 10,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
                           child: Text("Add"),
                           onPressed: ()async {
-                            try {
                               dynamic text = await Utilities.Downloaddata(
                                   "/shubhamgitvns/c790d76f25b1481514f829cced8373dd/raw/15ef8b9273019f2400df69cc43d873df515389ae/gistfile1.txt");
                               print(text);
                              id="${text["data"]["id"]}";
                              bookname="${text["data"]["book"]}";
                              bookprice="${text["data"]["price"]}";
-                             print(id);
-                             print(bookname);
-                             print(bookprice);
+                              print("bn" + bookname);
+                              var javabook = Book(
+                                  int.parse(id),
+                                  bookname,
+                                  int.parse(bookprice));
+                              await DatabaseHandler.insertBook(javabook);
+                              print("Add");
+                              setState(() {
+                                message = "Add";
+                              });
 
-                            }catch(ex){
-                              print(ex);
-                            }
 
-                              // print("bn" + bookname);
-                              // var javabook = Book(
-                              //     int.parse(idcontroller.text),
-                              //     namecontroller.text,
-                              //     int.parse(pricecontroller.text));
-                              //
-                              // await DatabaseHandler.insertBook(javabook);
-                              // print("Add");
-                              // setState(() {
-                              //   message = "Add";
-                              //   id = idcontroller.text;
-                              //   bookname = namecontroller.text;
-                              //   bookprice = pricecontroller.text;
-                              // });
-                              // text_Clear();
                             }),
 
                     ],
@@ -81,7 +73,50 @@ class _VsjSqliteState extends State<VsjSqlite> {
                       Text(bookname),
                       Text(bookprice),
                     ],
-                  )
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 60,
+                        child: TextField(
+                          onChanged: (value) {
+                            bookid = value;
+                          },
+                          controller: idcontroller,
+                        ),
+                      ),
+                      ElevatedButton(
+                          child: Text("Search"),
+                          onPressed: () async {
+                            print("Search");
+                            var list= await DatabaseHandler.books();
+                            List<Book> lst=list;
+                            lst=   lst.where((element) => element.id==int.parse(bookid)).toList();
+                            if(lst.length<=0) {
+                              bookname = "";
+                              bookprice="";
+                              message = "Not Found";
+                            }
+                            else
+                            {
+                              print(list);
+                              message="Found";
+                              Book book=lst.first;
+                              bookname=book.name;
+                              bookprice=book.price.toString();
+                            }
+                            setState(() {
+
+                            });
+                          }),
+                    ],
+                  ),
+
                 ],
               ),
             ),

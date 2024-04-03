@@ -8,8 +8,8 @@ import 'package:sqflite_demo/viewpage.dart';
 import 'database.dart';
 import 'downloder.dart';
 
-void main()  {
-  // await DatabaseHandler.initialize();
+void main() async  {
+   await DatabaseHandler.initialize();
   try {
     print("text");
 
